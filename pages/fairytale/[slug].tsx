@@ -38,7 +38,7 @@ const FairtalePage = ({ fairytale }: PageProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: fairytale.title,
+          prompt: fairytale.story.substring(1, 100),
         }),
       }).then((res) => res.json())
 
@@ -70,6 +70,7 @@ const FairtalePage = ({ fairytale }: PageProps) => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            textAlign: 'center',
           }}
         >
           <Image
