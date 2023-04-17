@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import NavigationBar from 'components/molecules/NavigationBar'
 import { getAllFairytaleSlugs, getFairytale } from 'lib/sanity.client'
+import { urlForImage } from 'lib/sanity.image'
 import { iFairytale } from 'lib/sanity.queries'
 import { GetStaticProps } from 'next'
 import Image from 'next/image'
@@ -37,7 +38,7 @@ const FairtalePage = ({ fairytale }: PageProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: imagePromt,
+          prompt: fairytale.title,
         }),
       }).then((res) => res.json())
 
@@ -61,17 +62,39 @@ const FairtalePage = ({ fairytale }: PageProps) => {
     <>
       <NavigationBar />
       <main className="pb-10">
-        <button
-          className="px-2 m-5 rounded-md bg-slate-500"
-          onClick={handleGenerateImage}
+        <div
+          style={{
+            padding: '15px',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          Generate image
-        </button>
-        {isLoading && <p>Loading...</p>}
+          <Image
+            src={
+              storyImage === ''
+                ? urlForImage(fairytale.coverImage).url()
+                : storyImage
+            }
+            alt=""
+            width={256}
+            height={256}
+          />
+          {isLoading && <p>Loading...</p>}
+          <button
+            className="m-5 rounded-md bg-slate-500 px-2"
+            onClick={handleGenerateImage}
+          >
+            Generate a new image for your story
+          </button>
 
-        {storyImage && (
-          <Image src={storyImage} alt="" width={256} height={256} />
-        )}
+          <h1 style={{ paddingTop: '30px' }}>{fairytale.title}</h1>
+          <p style={{ width: '500px', paddingTop: '10px' }}>
+            {fairytale.story}
+          </p>
+        </div>
       </main>
     </>
   )
